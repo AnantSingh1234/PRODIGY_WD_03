@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TASK 3-SIMPLE CALCULATOR</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(45deg, #F9DAD7, #C4C5F6);
+      background-size: 400% 400%;
+      animation: gradientAnimation 10s ease infinite;
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .calculator {
+      max-width: 400px;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .calculator h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .calculator .display {
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: right;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .calculator .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+    }
+
+    .calculator .buttons button {
+      padding: 15px;
+      font-size: 18px;
+      border: none;
+      background-color: #e0e0e0;
+      color: #333;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .calculator .buttons button:hover {
+      background-color: #ccc;
+    }
+
+    .calculator .buttons button:active {
+      background-color: #999;
+      color: #fff;
+    }
+
+    .history {
+      max-width: 400px;
+      margin: 20px auto;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .history h2 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .history .operation {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .history .answer {
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h1>ANANT SINGH-TASK 3</h1>
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button id="clear">C</button>
+      <button id="backspace">&#9003;</button>
+      <button id="divide">/</button>
+      <button id="multiply">*</button>
+      <button id="seven">7</button>
+      <button id="eight">8</button>
+      <button id="nine">9</button>
+      <button id="subtract">-</button>
+      <button id="four">4</button>
+      <button id="five">5</button>
+      <button id="six">6</button>
+      <button id="add">+</button>
+      <button id="one">1</button>
+      <button id="two">2</button>
+      <button id="three">3</button>
+      <button id="equals">=</button>
+      <button id="zero">0</button>
+      <button id="decimal">.</button>
+    </div>
+  </div>
+
+  <div class="history">
+    <h2>History</h2>
+    <div id="history-list"></div>
+  </div>
+
+  <script>
+    // JavaScript code
+    const display = document.getElementById('display');
+    const historyList = document.getElementById('history-list');
+
+    let expression = '';
+    let history = [];
+
+    function updateDisplay() {
+      display.textContent = expression;
+    }
+
+    function addToExpression(value) {
+      expression += value;
+      updateDisplay();
+    }
+
+    function calculateExpression() {
+      try {
+        const result = eval(expression);
+        addToHistory(expression, result);
+        expression = result;
+        updateDisplay();
+      } catch (error) {
+        display.textContent = 'Error';
+      }
+    }
+
+    function addToHistory(expression, result) {
+      const operationElement = document.createElement('div');
+      operationElement.classList.add('operation');
+      operationElement.textContent = expression;
+
+      const answerElement = document.createElement('div');
+      answerElement.classList.add('answer');
+      answerElement.textContent = result;
+
+      historyList.appendChild(operationElement);
+      historyList.appendChild(answerElement);
+
+      history.push({ expression, result });
+    }
+
+    function clearCalculator() {
+      expression = '';
+      updateDisplay();
+    }
+
+    function deleteLastChar() {
+      expression = expression.slice(0, -1);
+      updateDisplay();
+    }
+
+    document.querySelectorAll('.buttons button').forEach(button => {
+      button.addEventListener('click', () => {
+        const buttonText = button.textContent;
+        switch (buttonText) {
+          case 'C':
+            clearCalculator();
+            break;
+          case '&#9003;':
+            deleteLastChar();
+            break;
+          case '=':
+            calculateExpression();
+            break;
+          default:
+            addToExpression(buttonText);
+            break;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
